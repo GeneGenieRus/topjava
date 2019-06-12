@@ -19,7 +19,10 @@
     <servlet-mapping>
         <servlet-name>mealServlet</servlet-name>
         <url-pattern>/meals</url-pattern>
+        <url-pattern>/updatemeal</url-pattern>
+        <url-pattern>/deletemeal</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>userServlet</servlet-name>
         <url-pattern>/users</url-pattern>
