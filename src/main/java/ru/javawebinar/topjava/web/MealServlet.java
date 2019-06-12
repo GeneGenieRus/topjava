@@ -68,14 +68,14 @@ public class MealServlet extends HttpServlet {
         if (req.getParameter("id") != null)
             mealServiceImp.deleteMeal(Integer.parseInt(req.getParameter("id")));
 
-        mealServiceImp.createMeal(new Meal(LocalDateTime.of(
+        mealServiceImp.createMeal(LocalDateTime.of(
                 Integer.parseInt(req.getParameter("year")),
                 Integer.parseInt(req.getParameter("month")),
                 Integer.parseInt(req.getParameter("day")),
                 Integer.parseInt(req.getParameter("hour")),
                 Integer.parseInt(req.getParameter("minute"))),
                     req.getParameter("description"),
-                        Integer.parseInt(req.getParameter("calories"))));
+                        Integer.parseInt(req.getParameter("calories")));
 
         resp.sendRedirect("meals");
     }

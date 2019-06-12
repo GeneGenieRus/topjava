@@ -3,14 +3,16 @@ package ru.javawebinar.topjava.service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MealServiceImp implements MealService {
-
+    private static AtomicInteger generateID = new AtomicInteger(0);
     @Override
-    public void createMeal(Meal meal) {
+    public void createMeal(LocalDateTime localDateTime, String description, int calories) {
 
-        MealsUtil.meals.add(meal);
+        MealsUtil.meals.add(new Meal(localDateTime, description, calories, generateID.incrementAndGet()));
     }
 
     @Override

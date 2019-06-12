@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.util;
 
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
+import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.service.MealServiceImp;
 
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,14 +20,18 @@ import static java.util.stream.Collectors.toList;
 
 public class MealsUtil {
 
-    public static ArrayList<Meal>  meals =  new ArrayList(Arrays.asList(
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
-    ));
+    public static CopyOnWriteArrayList<Meal> meals =  new CopyOnWriteArrayList();
+    static {
+        MealServiceImp mealServiceImp = new MealServiceImp();
+        mealServiceImp.createMeal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500);
+        mealServiceImp.createMeal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000);
+        mealServiceImp.createMeal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500);
+        mealServiceImp.createMeal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000);
+        mealServiceImp.createMeal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500);
+        mealServiceImp.createMeal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510);
+
+    }
+
 
     public static void main(String[] args) {
         MealServiceImp mealServiceImp = new MealServiceImp();
