@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -18,7 +19,7 @@ public class SpringMain {
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
             adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ROLE_ADMIN));
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            System.out.println(Arrays.toString(mealRestController.getAll().toArray()));
+            System.out.println(Arrays.toString(mealRestController.getAll(LocalDateTime.MIN, LocalDateTime.now()).toArray()));
             System.out.println(Arrays.toString(adminUserController.getAll().toArray()));
         }
 }
