@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -69,6 +71,24 @@ public class MealServlet extends HttpServlet {
                         mealRestController.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
+                break;
+            case "filter":
+                log.info("filter");
+
+                LocalDateTime firstDateTime = LocalDateTime.of(
+                        request.getParameter("firstDate").isEmpty() ? LocalDate.MIN :  LocalDate.parse(request.getParameter("firstDate")),
+                        request.getParameter("firstTime").isEmpty() ? LocalTime.MIN : LocalTime.parse(request.getParameter("firstTime")));
+                LocalDateTime secondDateTime = LocalDateTime.of(
+                        request.getParameter("secondDate").isEmpty() ? LocalDate.MAX :  LocalDate.parse(request.getParameter("secondDate")),
+                        request.getParameter("secondTime").isEmpty() ? LocalTime.MAX : LocalTime.parse(request.getParameter("secondTime")));
+                request.setAttribute("firstDate", request.getParameter("firstDate"));
+                request.setAttribute("secondDate", request.getParameter("secondDate"));
+                request.setAttribute("firstTime", request.getParameter("firstTime"));
+                request.setAttribute("secondTime", request.getParameter("secondTime"));
+
+                request.setAttribute("meals",
+                        mealRestController.getAll(firstDateTime, secondDateTime));
+                request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
             case "all":
             default:

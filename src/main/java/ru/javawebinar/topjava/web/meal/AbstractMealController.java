@@ -25,8 +25,8 @@ public class AbstractMealController {
         return MealsUtil.getWithExcess(service.getAll(SecurityUtil.authUserId()), MealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
-    public List<Meal> getAll(LocalDateTime start, LocalDateTime end){
-        return service.getAll(start, end, SecurityUtil.authUserId());
+    public List<MealTo> getAll(LocalDateTime start, LocalDateTime end){
+        return MealsUtil.getWithExcess(service.getAll(start, end, SecurityUtil.authUserId()), MealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
     public Meal get(int id) {

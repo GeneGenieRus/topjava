@@ -18,6 +18,25 @@
 </head>
 <body>
 <section>
+    <form method="get" action="meals">
+        <input type="hidden" name="action" value="filter">
+        <dl>
+            <dt>First Date:</dt>
+            <dd><input type="date" name="firstDate" value="${firstDate}"></dd>
+            <dt>Second Date:</dt>
+            <dd><input type="date" name="secondDate" value="${secondDate}"></dd>
+        </dl>
+        <dl>
+            <dt>First Time:</dt>
+            <dd><input type="time" name="firstTime" value="${firstTime}"></dd>
+            <dt>Second Time:</dt>
+            <dd><input type="time" name="secondTime" value="${secondTime}"></dd>
+        </dl>
+        <button type="submit">Применить фильтр</button>
+    </form>
+
+</section>
+<section>
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
