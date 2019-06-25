@@ -80,7 +80,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return jdbcTemplate.query("SELECT * FROM meals WHERE user_id=" + userId, new RowMapper<Meal>() {
+        return jdbcTemplate.query("SELECT * FROM meals WHERE user_id=" + userId + " ORDER BY datetime DESC;", new RowMapper<Meal>() {
             @Override
             public Meal mapRow(ResultSet resultSet, int i) throws SQLException {
                 return new Meal(resultSet.getInt("id"),
@@ -96,7 +96,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
         return jdbcTemplate.query("SELECT * FROM meals " +
-                "WHERE datetime >= \'" + Timestamp.valueOf(startDate) + "\'::timestamp AND datetime <=\'" + Timestamp.valueOf(endDate) + "\'::timestamp", new RowMapper<Meal>() {
+                "WHERE datetime >= \'" + Timestamp.valueOf(startDate) + "\'::timestamp AND datetime <=\'" + Timestamp.valueOf(endDate) + "\'::timestamp AND user_id=" + userId + " ORDER BY datetime DESC;", new RowMapper<Meal>() {
             @Override
             public Meal mapRow(ResultSet resultSet, int i) throws SQLException {
                 return new Meal(resultSet.getInt("id"),
