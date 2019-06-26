@@ -49,9 +49,11 @@ public class JdbcMealRepositoryImpl implements MealRepository {
         if (meal.isNew()) {
             key = simpleJdbcInsert.executeAndReturnKey(map);
             meal.setId(key.intValue());
-        } else if (jdbcTemplate.update("UPDATE meals SET description=?, datetime=?, calories=? WHERE id=? AND user_id=?",
-                meal.getDescription(), meal.getDateTime(), meal.getCalories(), meal.getId(), userId) == 0)
-        return null;
+        } else if (jdbcTemplate.update(
+                "UPDATE meals SET description=?, datetime=?, calories=? WHERE id=? AND user_id=?",
+                meal.getDescription(), meal.getDateTime(), meal.getCalories(), meal.getId(), userId
+        ) == 0)
+            return null;
 
         return meal;
     }
@@ -59,7 +61,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     @Override
     public boolean delete(int id, int userId) {
 
-        if (jdbcTemplate.update("DELETE FROM meals WHERE id=" + id + " AND user_id=" + userId) > 0)
+        if (jdbcTemplate.update("DELETE FROM meals WHERE id=? AND user_id=?", id, userId) > 0)
             return true;
         else
             return false;
@@ -67,45 +69,31 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        return DataAccessUtils.singleResult(jdbcTemplate.query("SELECT * FROM meals WHERE user_id=" + userId + " AND id=" + id,
-                new RowMapper<Meal>() {
-                    @Override
-                    public Meal mapRow(ResultSet resultSet, int i) throws SQLException {
-                        return new Meal(resultSet.getInt("id"),
-                                resultSet.getTimestamp("datetime").toLocalDateTime(),
-                                resultSet.getString("description"),
-                                resultSet.getInt("calories"));
-                    }
-                }));
+        return DataAccessUtils.singleResult(jdbcTemplate.query(
+                "SELECT * FROM meals WHERE user_id=? AND id=?",
+                ROW_MAPPER, userId, id
+        ));
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return jdbcTemplate.query("SELECT * FROM meals WHERE user_id=" + userId + " ORDER BY datetime DESC;", new RowMapper<Meal>() {
-            @Override
-            public Meal mapRow(ResultSet resultSet, int i) throws SQLException {
-                return new Meal(resultSet.getInt("id"),
+        return jdbcTemplate.query(
+                "SELECT * FROM meals WHERE user_id=? ORDER BY datetime DESC;",
+                (resultSet, i) -> new Meal(resultSet.getInt("id"),
                         resultSet.getTimestamp("datetime").toLocalDateTime(),
                         resultSet.getString("description"),
-                        resultSet.getInt("calories"));
-
-            }
-        });
-
+                        resultSet.getInt("calories"))
+                , userId);
     }
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        return jdbcTemplate.query("SELECT * FROM meals " +
-                "WHERE datetime >= \'" + Timestamp.valueOf(startDate) + "\'::timestamp AND datetime <=\'" + Timestamp.valueOf(endDate) + "\'::timestamp AND user_id=" + userId + " ORDER BY datetime DESC;", new RowMapper<Meal>() {
-            @Override
-            public Meal mapRow(ResultSet resultSet, int i) throws SQLException {
-                return new Meal(resultSet.getInt("id"),
-                        resultSet.getTimestamp("datetime").toLocalDateTime(),
-                        resultSet.getString("description"),
-                        resultSet.getInt("calories"));
-
-            }
-        });
+        return jdbcTemplate.query(
+                "SELECT * FROM meals WHERE datetime >= ? AND datetime <=? AND user_id=? ORDER BY datetime DESC;"
+                , ROW_MAPPER
+                , Timestamp.valueOf(startDate)
+                , Timestamp.valueOf(endDate)
+                , userId
+        );
     }
 }
