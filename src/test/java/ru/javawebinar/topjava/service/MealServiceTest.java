@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -18,7 +18,6 @@ import java.util.List;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 
-import static org.junit.Assert.*;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
@@ -92,12 +91,14 @@ public class MealServiceTest {
                 "UpdatedDinner", 1300);
         service.update(newMeal, 100001);
     }
-/*
-    @Test(expected = DataAccessException.class)
+
+    @Test(expected = DuplicateKeyException.class)
     public void duplicateTimeCreate() throws Exception {
-        service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.ROLE_USER));
+        service.create(new Meal(LocalDateTime.of(2019, 06, 25, 19, 00),
+                "TestMeal", 9999),
+                100000);
     }
 
 
-   */
+
 }
