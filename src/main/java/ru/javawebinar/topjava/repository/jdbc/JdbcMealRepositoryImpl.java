@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -48,8 +49,8 @@ public class JdbcMealRepositoryImpl implements MealRepository {
         if (meal.isNew()) {
             key = simpleJdbcInsert.executeAndReturnKey(map);
             meal.setId(key.intValue());
-        } else if (jdbcTemplate.update("UPDATE meals SET description=?, datetime=?, calories=?, user_id=? WHERE id=?",
-                meal.getDescription(), meal.getDateTime(), meal.getCalories(), userId, meal.getId()) == 0)
+        } else if (jdbcTemplate.update("UPDATE meals SET description=?, datetime=?, calories=? WHERE id=? AND user_id=?",
+                meal.getDescription(), meal.getDateTime(), meal.getCalories(), meal.getId(), userId) == 0)
         return null;
 
         return meal;
@@ -66,7 +67,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        return jdbcTemplate.queryForObject("SELECT * FROM meals WHERE user_id=" + userId + " AND id=" + id,
+        return DataAccessUtils.singleResult(jdbcTemplate.query("SELECT * FROM meals WHERE user_id=" + userId + " AND id=" + id,
                 new RowMapper<Meal>() {
                     @Override
                     public Meal mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -75,7 +76,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
                                 resultSet.getString("description"),
                                 resultSet.getInt("calories"));
                     }
-                });
+                }));
     }
 
     @Override
