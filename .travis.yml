@@ -7,6 +7,9 @@ cache:
   directories:
   - $HOME/.m2
 
+services:
+  - postgresql
+
 # https://docs.travis-ci.com/user/database-setup/#PostgreSQL
 before_script:
 - psql -c 'create database topjava' -U postgres
@@ -15,7 +18,7 @@ before_script:
 # https://docs.travis-ci.com/user/customizing-the-build#Building-Specific-Branches
 branches:
   only:
-  - master
+  - HW4
 
 # https://docs.travis-ci.com/user/notifications#Configuring-email-notifications
 #notifications:
