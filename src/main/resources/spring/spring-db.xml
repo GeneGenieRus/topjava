@@ -13,12 +13,6 @@
 
 
 
-<!--    <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>-->
-
-    <!---->
-
-
-
 
 
 
@@ -30,14 +24,16 @@
 
     <beans profile="hsqldb">
         <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>
-
-        <!--no pooling-->
+                <!--no pooling
         <bean id="dataSource"
               class="org.springframework.jdbc.datasource.DriverManagerDataSource"
               p:driverClassName="org.hsqldb.jdbcDriver"
               p:url="${database.url}"
               p:username="${database.username}"
-              p:password="${database.password}"/>
+              p:password="${database.password}"/>-->
+        <jdbc:embedded-database id="dataSource" type="HSQL">
+            <jdbc:script location="classpath:db/initDB_hsql.sql"/>
+        </jdbc:embedded-database>
     </beans>
 
     <beans profile="postgres">
@@ -51,7 +47,6 @@
             <property name="staticMethod" value="org.slf4j.bridge.SLF4JBridgeHandler.install" />
         </bean>
 
-        <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE"/>
 
         <bean id="dataSource"
               class="org.apache.tomcat.jdbc.pool.DataSource"
@@ -70,7 +65,7 @@
          </jdbc:initialize-database>
  -->
 
-        <context:component-scan base-package="ru.javawebinar.**.repository.jdbc"/>
+        <context:component-scan base-package="ru.javawebinar.**.repository.jdbc.postgres"/>
         <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
             <constructor-arg ref="dataSource"/>
         </bean>
