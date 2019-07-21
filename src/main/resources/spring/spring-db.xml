@@ -50,6 +50,7 @@
               p:url="${database.url}"
               p:username="${database.username}"
               p:password="${database.password}"/>
+
     </beans>
 
     <beans profile="tomcat">
@@ -66,6 +67,11 @@
         <bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
             <constructor-arg ref="jdbcTemplate"/>
         </bean>
+
+        <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <property name="dataSource" ref="dataSource" />
+        </bean>
+
     </beans>
 
     <beans profile="jpa,datajpa">
