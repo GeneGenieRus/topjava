@@ -1,5 +1,5 @@
 package ru.javawebinar.topjava.service;
-package ru.javawebinar.topjava.service;
+
 
 import org.junit.Before;
 import org.junit.Test;
