@@ -1,14 +1,26 @@
 package ru.javawebinar.topjava.to;
 
+import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class MealTo extends BaseTo {
+public class MealTo extends BaseTo implements Serializable {
+    private static final long serialVersionUID = 1L;
 
+    @NotNull
+    @DateTimeFormat
     private LocalDateTime dateTime;
 
+    @NotBlank
     private String description;
 
+    @Range(min = 10, max = 10000)
+    @NotNull
     private int calories;
 
     private boolean excess;
@@ -67,4 +79,22 @@ public class MealTo extends BaseTo {
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
                 ", excess=" + excess;}
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
+
+    public void setExcess(boolean excess) {
+        this.excess = excess;
+    }
 }
+
+
