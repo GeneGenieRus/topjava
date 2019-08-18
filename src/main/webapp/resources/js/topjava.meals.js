@@ -1,4 +1,6 @@
+
 const mealAjaxUrl = "ajax/profile/meals/";
+
 
 function updateFilteredTable() {
     $.ajax({
@@ -13,6 +15,12 @@ function clearFilter() {
     $.get("ajax/profile/meals/", updateTableByData);
 }
 
+
+
+    // $("#datetimepicker").datetimepicker();
+
+
+
 $(function () {
     makeEditable({
         ajaxUrl: mealAjaxUrl,
@@ -25,7 +33,16 @@ $(function () {
             "info": true,
             "columns": [
                 {
-                    "data": "dateTime"
+                    "data": "dateTime",
+                    "render": function (data, type, row) {
+                        if (type === "display") {
+
+                           return new Date(Date.parse(data)).toLocaleDateString("ru") +
+                               " " +
+                               new Date(Date.parse(data)).toLocaleTimeString("ru").substring(0, 5);;
+                        }
+                        return data;
+                    }
                 },
                 {
                     "data": "description"
@@ -49,7 +66,15 @@ $(function () {
                     0,
                     "desc"
                 ]
-            ]
+            ],
+            "createdRow": function (row, data, dataIndex) {
+                if (data.excess === true) {
+                    $(row).attr("data-mealExcess", true);
+                }
+                else{
+                    $(row).attr("data-mealExcess", false);
+                }
+            }
         }),
         updateTable: function () {
             $.get(mealAjaxUrl, updateTableByData);
